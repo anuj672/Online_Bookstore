@@ -1,0 +1,42 @@
+<%= form_with(model: cart_item) do |form| %>
+  <% if cart_item.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(cart_item.errors.count, "error") %> prohibited this cart_item from being saved:</h2>
+
+      <ul>
+        <% cart_item.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.hidden_field :book_id, value: @book.id %>
+  </div>
+
+  <!-- calculates total price automatically -->
+  <div class="field">
+    <% qty = @book.stock %>
+    <%= form.label :quantity %>
+    <%= form.number_field :quantity, :id => 'quantity', min: 1, max: qty, onchange: "calculateTotalPrice(this);" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :total_price %>
+    <%= form.text_field :total_price, :id => 'total_price' ,:readonly => 'true' %>
+  </div>
+
+  <div>
+    <%= form.submit "Add to Cart" %>
+  </div>
+
+  <script type="text/javascript">
+      function calculateTotalPrice(element) {
+          var price = "<%= @book.price %>";
+          document.getElementById('total_price').value = (document.getElementById('quantity').value * price).toFixed(2);
+          var x= document.getElementById('total_price').value;
+          // document.getElementById("cost").innerHTML = "total price " + x;
+      }
+  </script>
+<% end %>

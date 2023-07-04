@@ -1,0 +1,13 @@
+<p style="color: green"><%= notice %></p>
+
+<h2>Viewing Your Cart</h2>
+
+<%= render @cart %>
+
+<div>
+<!-- option to continue to check out if items are in cart -->
+  <% if @cart.cart_items.size > 0 %>
+  <%= button_to "Continue to Checkout", edit_cart_path(@cart), :method => :get %><br>
+    <%= link_to "Keep Shopping", books_path %>
+  <% end %>
+</div>

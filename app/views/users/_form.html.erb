@@ -1,0 +1,60 @@
+<%= form_with(model: user) do |form| %>
+  <% if user.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+        <% user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <div style="display: block">
+    <%= form.label :username, style: "display: inline" %> <span style="color:red">*</span>
+    </div>
+    <%= form.text_field :username %>
+  </div>
+
+  <div>
+  <div style="display: block">
+    <%= form.label :password, style: "display: inline" %><span style="color:red">*</span>
+  </div>
+    <%= form.password_field :password %>
+  </div>
+
+  <div>
+  <div style="display: block">
+    <%= form.label :name, style: "display: inline" %><span style="color:red">*</span>
+  </div>
+    <%= form.text_field :name %>
+  </div>
+
+  <div style="display: block">
+  <div>
+    <%= form.label :email, style: "display: inline" %><span style="color:red">*</span>
+  </div>
+    <%= form.text_field :email %>
+  </div>
+
+  <div>
+    <%= form.label :address, style: "display: block" %>
+    <%= form.text_field :address %>
+  </div>
+
+  <div>
+    <%= form.label :credit_card_number, style: "display: block" %>
+    <%= form.text_field :credit_card_number %>
+  </div>
+
+  <div>
+    <%= form.label :phone_number, style: "display: block" %>
+    <%= form.text_field :phone_number %>
+  </div>
+<br>
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,28 @@
+<p id=”notice”><%= notice %></p>
+<h1>Online Bookstore</h1>
+<p>Buying books has never been easier!</p>
+<% if current_user %>
+  Logged in as <%= current_user.name %>.<br><br>
+  <%= link_to 'View Books', books_path %><br>
+  <%= link_to 'View All Reviews', reviews_path %><br>
+  <%= link_to 'View My Reviews', reviews_path(:user => current_user.username) %><br>
+  <% if current_user.cart %>
+    <%= link_to 'View My Cart', cart_path(current_user.cart.id) %><br>
+  <% end %>
+  <%= link_to 'View My Purchase History', transactions_path %><br>
+  <%= link_to 'Edit Profile', edit_user_path(current_user.id) %><br><br>
+  <%= link_to "Logout", logout_path %>
+
+<%elsif current_admin %>
+  Logged in as <%= current_admin.name %>.<br><br>
+  <%= link_to 'View Books', books_path %><br>
+  <%= link_to 'View All Reviews', reviews_path %><br>
+  <%= link_to 'View My Reviews', reviews_path(:user => 'administrator') %><br>
+  <%= link_to 'View Users', users_path %><br>
+  <%= link_to 'Edit Profile', edit_admin_path(current_admin.id) %><br><br>
+  <%= link_to "Logout", logout_path %>
+
+<% else %>
+  <%= link_to "Sign up", signup_path %> or
+  <%= link_to "Login", login_path %>
+<% end %>

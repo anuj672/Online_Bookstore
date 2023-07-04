@@ -1,0 +1,69 @@
+<p style="color: green"><%= notice %></p>
+<h2>Book Details</h2>
+
+<%= render @book %>
+
+<div>
+  <!-- shows edit link to only admin -->
+  <% if current_admin %>
+    <%= link_to "Edit this book", edit_book_path(@book) %> |
+  <% end %>
+  <!-- hides purchase related links from admin & links are only available to users if book stock is available-->
+  <% if current_user %>
+    <%= link_to_if @book.stock > 0, 'Buy Now',
+                       new_transaction_path(:book_id => @book.id) %><br/>
+    <!-- if book is not already in user's cart, shows link to add to cart, otherwise shows link to view in cart-->
+    <% if @book.cart_items.select('cart_id').where('cart_id = ?', current_user.cart.id).limit(1).size == 0 %>
+      <%= link_to_if @book.stock > 0, 'Add to Cart', new_cart_item_path(:book_id => @book.id) %><br/>
+    <% else %>
+      <%= link_to 'View in Cart', cart_path(:id => current_user.cart.id) %><br/>
+    <% end %>
+  <% end %>
+  <%= link_to "Back to books", books_path %>
+  <!-- shows delete button only to admins -->
+  <% if current_admin %>
+    <%= button_to "Destroy this book", @book, method: :delete %>
+  <% end %>
+</div>
+<br/><br/>
+<!-- renders related reviews if there are any -->
+<% if @book.reviews.size > 0 %>
+<h4>This book's reviews:</h4>
+
+<table>
+  <thead>
+  <tr>
+    <th>Book</th>
+    <th>Rating</th>
+    <th>Review</th>
+    <th>Written By</th>
+    <th colspan="4"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+
+  <% @book.reviews.each do |review| %>
+    <tr>
+      <td><%= review.book.name %></td>
+      <td><%= review.rating %></td>
+      <td><%= review.review %></td>
+      <% if !review.user.nil? %>
+        <td><%= review.user.username %></td>
+      <% else %>
+        <td>Administrator</td>
+      <% end %>
+      <% if current_admin || current_user.id == review.user_id %>
+        <td><%= link_to 'Edit', edit_review_path(review.id) %></td>
+      <% end %>
+      <% if current_admin %>
+        <td><%= link_to 'Destroy', review, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<% end %>
+
+<%= link_to 'Write a review for this book', new_review_path(:book_id => @book.id) %><br>
+<%= link_to "View all reviews for all books", reviews_path %>

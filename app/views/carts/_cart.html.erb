@@ -1,0 +1,43 @@
+<% flash.each do|key,value| %>
+  <div class = "flash<%=key%>">
+    <%=value%>
+  </div>
+<% end %>
+
+<div id="<%= dom_id cart %>">
+
+  <% if @cart.cart_items.size == 0 %>
+    <h3>You do not have any items in your cart yet.</h3>
+    <%= link_to "Start Shopping!", books_path %>
+  <% else %>
+    <table>
+      <thead>
+      <tr>
+        <th>Book</th>
+        <th>Book Price</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+        <th colspan="4"></th>
+      </tr>
+      </thead>
+
+      <tbody>
+
+      <% @cart.cart_items.each do |cart_item| %>
+        <tr>
+          <td><%= cart_item.book.name %></td>
+          <td><%= number_to_currency(cart_item.book.price) %></td>
+          <td><%= cart_item.quantity %></td>
+          <td><%= number_to_currency(cart_item.total_price) %></td>
+          <td><%= link_to 'Edit', edit_cart_item_path(cart_item.id) %></td>
+          <td><%= button_to "Remove from cart", cart_item, method: :delete %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+    <div style="font-size:20px">
+      <%= 'Cart Subtotal: ' + number_to_currency(@cart.cart_items.sum(:total_price)) %>
+    </div><br>
+  <% end %>
+</div>

@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  username: one
+  password_digest: MyString
+  name: MyString
+  email: one@test.com
+  address: MyString
+  credit_card_number: 1111222233334444
+  phone_number: 111-111-1111
+
+two:
+  id: 2
+  username: two
+  password_digest: MyString
+  name: MyString
+  email: two@test.com
+  address: MyString
+  credit_card_number: 1111222233334444
+  phone_number: 222-222-2222

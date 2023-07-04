@@ -1,0 +1,15 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Admins</h1>
+
+<div id="admins">
+  <% @admins.each do |admin| %>
+
+    <p>
+      <%= link_to "View and Edit admin details", admin %>
+    </p>
+    <%= link_to "Back to admins", root_path %>
+  <% end %>
+</div>
+
+

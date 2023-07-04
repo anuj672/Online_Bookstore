@@ -1,0 +1,66 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Reviews</h1>
+
+<!-- search field to filter reviews list by book name-->
+<%= form_tag reviews_path, method: :get do %>
+  <%= label_tag  "Search for review by book name:" %>
+  <%= text_field_tag :book, params[:book], :placeholder => "Book Name..." %>
+  <%= submit_tag 'Search', name: nil %>
+<% end %>
+
+<!-- search field to filter reviews list by user who wrote it (username) -->
+<%= form_tag reviews_path, method: :get do %>
+  <%= label_tag  "Search for review by user:" %>
+  <%= text_field_tag :user, params[:user], :placeholder => "Username..." %>
+  <%= submit_tag 'Search', name: nil %>
+<% end %>
+<%= link_to "Clear Search", reviews_path %>
+
+<table>
+  <thead>
+  <tr>
+    <th>Book</th>
+    <th>Rating</th>
+    <th>Review</th>
+    <th>Written By</th>
+    <th colspan="4"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+
+  <% @reviews.each do |review| %>
+    <tr>
+      <td><%= link_to review.book.name, book_path(review.book_id) %></td>
+      <td><%= review.rating %></td>
+      <td><%= review.review %></td>
+      <% if !review.user.nil? %>
+        <td><%= review.user.username %></td>
+      <% else %>
+        <td>Administrator</td>
+      <% end %>
+      <td><%= link_to 'Show', review %></td>
+      <% if current_admin || current_user.id == review.user_id %>
+        <td><%= link_to 'Edit', edit_review_path(review.id) %></td>
+      <% end %>
+      <% if current_admin %>
+        <td><%= link_to 'Destroy', review, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<!-- links to quickly filter list to your reviews vs all reviews -->
+<% if current_user && params[:user] == current_user.username %>
+  Currently viewing only your reviews. <%= link_to 'View all reviews instead', reviews_path %><br>
+<% elsif current_user %>
+  <%= link_to 'View only my reviews', reviews_path(:user => current_user.username) %><br>
+<% end %>
+<% if current_admin && params[:user] == 'administrator' %>
+  Currently viewing only your reviews. <%= link_to 'View all reviews instead', reviews_path %><br>
+<% elsif current_admin %>
+  <%= link_to 'View only my reviews', reviews_path(:user => 'administrator') %><br>
+<% end %>
+<%= link_to "View all books", books_path %>

@@ -1,0 +1,29 @@
+<div id="<%= dom_id review %>">
+  <p>
+    <strong>Book:</strong>
+    <%= link_to review.book.name, book_path(review.book_id) %>
+  </p>
+
+  <% if !review.user.nil? %>
+    <p>
+      <strong>User:</strong>
+      <%= review.user.name %>
+    </p>
+  <% else %>
+    <p>
+      <strong>User:</strong>
+      Administrator
+    </p>
+  <% end %>
+
+  <p>
+    <strong>Rating:</strong>
+    <%= review.rating %>
+  </p>
+
+  <p>
+    <strong>Review:</strong>
+    <%= review.review %>
+  </p>
+
+</div>

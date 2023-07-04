@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @user %>
+
+<div>
+  <%= link_to "Edit this user", edit_user_path(@user) %> |
+  <% if current_admin %>
+  <%= link_to "Back to users", users_path %>
+  <% end %>
+  <% if current_user %>
+    <%= link_to "Back to home", root_path %>
+  <% end %>
+  <%= button_to "Destroy this user", @user, method: :delete, data: {turbo_confirm: "Are you sure?"} %>
+</div>

@@ -1,0 +1,12 @@
+<h1>Editing user</h1>
+
+<%= render "form", user: @user %>
+
+<br>
+
+<div>
+  <% if (!current_user.nil? && current_user.id == @user.id) || !current_admin.nil? %>
+    <%= button_to "Delete Account", @user, method: :delete, data: { turbo_confirm: 'Are you sure?' } %>
+  <% end %></br>
+  <%= link_to "Cancel", root_path %>
+</div>

@@ -1,0 +1,89 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Books</h1>
+
+<!-- search field to filter list by author -->
+<%= form_tag books_path, method: :get do %>
+  <%= label_tag  "Search for book by author:" %>
+  <%= text_field_tag :author, params[:author], :placeholder => "Author Name..." %>
+  <%= submit_tag 'Search', name: nil %>
+<% end %>
+
+<!-- number field to filter list by average rating -->
+<%= form_tag books_path, method: :get do %>
+  <%= label_tag "View books with an average rating over:" %>
+  <%= number_field_tag :rating, params[:rating], min:1, max:5 %>
+  <%= submit_tag 'Search', name: nil %>
+<% end %>
+<%= link_to "Clear Search", books_path %>
+
+<table>
+  <thead>
+  <tr>
+    <!-- allows sort by column header -->
+    <th><%= link_to "Title", :sort => "name"%></th>
+    <!-- allows sort by column header -->
+    <th><%= link_to "Author", :sort => "author"%></th>
+    <th>Publisher</th>
+    <th>Price</th>
+    <th>Available Stock</th>
+    <th>Avg Rating</th>
+    <th colspan="4"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+
+  <% @books.each do |book| %>
+    <tr>
+      <td><%= book.name %></td>
+      <td><%= book.author %></td>
+      <td><%= book.publisher %></td>
+      <td><%= number_to_currency(book.price) %></td>
+      <td><%= book.stock %></td>
+      <!-- shows average only if reviews are present, otherwise shows 0 as review rating average -->
+      <% if book.reviews.size > 0 %>
+        <td><%= book.reviews.average(:rating).to_f.round(2) %></td>
+      <% else %>
+        <td><%= book.reviews.size %></td>
+      <% end %>
+      <td><%= link_to 'View Details', book %></td>
+      <!-- only shows edit link to admins -->
+      <% if current_admin %>
+        <td><%= link_to 'Edit', edit_book_path(book.id) %></td>
+      <% end %>
+      <!-- only shows purchase related links to users & if book stock is available -->
+      <% if current_user %>
+        <td><%= link_to_if book.stock > 0, 'Buy Now',
+                           new_transaction_path(:book_id => book.id) %></td>
+      <% end %>
+      <!-- shows add to cart if item is not already in cart, otherwise shows a link to view the item in cart -->
+      <% if current_user && (book.cart_items.select('cart_id').where('cart_id = ?', current_user.cart.id).limit(1).size == 0)%>
+        <td><%= link_to_if book.stock > 0, 'Add to Cart',
+                           new_cart_item_path(:book_id => book.id) %></td>
+      <% elsif current_user %>
+        <td><%= link_to 'View in Cart', cart_path(:id => current_user.cart.id) %></td>
+      <% end %>
+      <td><%= link_to 'Write a review', new_review_path(:book_id => book.id) %></td>
+      <% if current_admin %>
+        <td><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<!-- shows new book link to only admin -->
+<% if current_admin %>
+  <%= link_to "New book", new_book_path %> |
+<% end %>
+<%= link_to "View all reviews", reviews_path %>
+<!-- hides purchase related links from the admin -->
+<% if current_user %>
+  <% if current_user.cart %>
+  | <%= link_to "View my cart", cart_path(current_user.cart.id) %> |
+  <% end %>
+  <%= link_to "View my purchase history", transactions_path %>
+<% end %>

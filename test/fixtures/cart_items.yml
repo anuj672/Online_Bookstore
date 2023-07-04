@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cart: one
+  book: 1
+  user: 1
+  quantity: 1
+  total_price: 1.5
+
+two:
+  cart: two
+  book: 1
+  user: 1
+  quantity: 1
+  total_price: 1.5

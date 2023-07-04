@@ -1,0 +1,60 @@
+<%= form_with(model: transaction) do |form| %>
+  <% if transaction.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
+
+      <ul>
+        <% transaction.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>You are purchasing the book: <b><%= @book.name %></b></p>
+
+  <!-- calculates total price automatically -->
+  <div class="field">
+    <% qty = @book.stock %>
+    <%= form.label :quantity %>
+    <%= form.number_field :quantity, :id => 'quantity', min: 1, max: qty, onchange: "calculateTotalPrice(this);" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :total_price %>
+    <%= form.text_field :total_price, :id => 'total_price', :readonly => 'true' %>
+  </div>
+
+  <div class="field">
+    <%= form.hidden_field :book_id, value: @book.id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :credit_card_number %>
+    <%= form.text_field :credit_card_number, value: current_user.credit_card_number %>
+  </div>
+
+  <div>
+    <%= form.label :address %>
+    <%= form.text_field :address, value: current_user.address %>
+  </div>
+
+  <div>
+    <%= form.label :phone_number %>
+    <%= form.text_field :phone_number, value: current_user.phone_number %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Complete purchase" %>
+  </div>
+  <p id="cost"></p>
+  <script type="text/javascript">
+      function calculateTotalPrice(element) {
+          var price = "<%= @book.price %>";
+          document.getElementById('total_price').value = (document.getElementById('quantity').value * price).toFixed(2);
+          var x= document.getElementById('total_price').value;
+          // document.getElementById("cost").innerHTML = "total price " + x;
+      }
+  </script>
+<% end %>
+

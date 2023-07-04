@@ -1,0 +1,18 @@
+<div id="<%= dom_id cart_item %>">
+
+  <p>
+    <strong>Book:</strong>
+    <%= cart_item.book.name %>
+  </p>
+
+  <p>
+    <strong>Quantity:</strong>
+    <%= cart_item.quantity %>
+  </p>
+
+  <p>
+    <strong>Total price:</strong>
+    <%= number_to_currency(cart_item.total_price) %>
+  </p>
+
+</div>

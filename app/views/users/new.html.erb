@@ -1,0 +1,12 @@
+<% unless current_admin %>
+  <h1>Sign Up</h1>
+<% else %>
+  <h1>Create New User</h1>
+<% end %>
+
+<%= render "form", user: @user %>
+<br><br>
+<% unless current_admin %>
+  Already have an account? <%= link_to "Sign in", login_path %>
+<% end %>
+<br>
